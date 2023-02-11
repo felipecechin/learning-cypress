@@ -6,5 +6,6 @@ module.exports = defineConfig({
       // implement node event listeners 
     },
     defaultCommandTimeout: 4000,
+    baseUrl: "https://barrigarest.wcaquino.me",
   },
 });

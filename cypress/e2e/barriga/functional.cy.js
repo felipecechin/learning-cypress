@@ -1,6 +1,6 @@
+/// <reference types="cypress" />
 import '../../support/commandsContas'
 
-/// <reference types="cypress" />
 import loc from "../../support/locators"
 
 describe('Should test at a functional level', () => {
@@ -10,7 +10,6 @@ describe('Should test at a functional level', () => {
     })
 
     it('Should create an account', () => {
-
         cy.acessarMenuConta()
         cy.inserirConta('Conta de teste')
         cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso')

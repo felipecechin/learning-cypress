@@ -99,7 +99,7 @@ describe('Should test at a functional level', () => {
         cy.get(loc.MESSAGE).should('contain', 'sucesso')
     })
 
-    it.only('Should validate data send to create an account', () => {
+    it('Should validate data send to create an account', () => {
         cy.intercept({
             method: 'POST',
             url: '/contas',
@@ -122,5 +122,29 @@ describe('Should test at a functional level', () => {
         cy.inserirConta('teste')
         // cy.wait('@SaveConta').its('request.body.nome').should('not.be.empty')
         cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso')
+    })
+
+    it('Should test colors', () => {
+        cy.intercept({
+            method: 'GET',
+            url: '/extrato/**',
+        }, [
+            { "conta": "Conta para alterar", "id": 1492081, "descricao": "Receita paga", "envolvido": "faf", "observacao": null, "tipo": "REC", "data_transacao": "2023-02-12T03:00:00.000Z", "data_pagamento": "2023-02-12T03:00:00.000Z", "valor": "234.00", "status": true, "conta_id": 1594754, "usuario_id": 1, "transferencia_id": null, "parcelamento_id": null },
+            { "conta": "Conta com movimentacao", "id": 1491237, "descricao": "Receita pendente", "envolvido": "BBB", "observacao": null, "tipo": "REC", "data_transacao": "2023-02-11T03:00:00.000Z", "data_pagamento": "2023-02-11T03:00:00.000Z", "valor": "-1500.00", "status": false, "conta_id": 1594757, "usuario_id": 1, "transferencia_id": null, "parcelamento_id": null },
+            { "conta": "Conta para saldo", "id": 1491238, "descricao": "Despesa paga", "envolvido": "CCC", "observacao": null, "tipo": "DESP", "data_transacao": "2023-02-11T03:00:00.000Z", "data_pagamento": "2023-02-11T03:00:00.000Z", "valor": "3500.00", "status": true, "conta_id": 1594758, "usuario_id": 1, "transferencia_id": null, "parcelamento_id": null },
+            { "conta": "Conta para saldo", "id": 1491239, "descricao": "Despesa pendente", "envolvido": "DDD", "observacao": null, "tipo": "DESP", "data_transacao": "2023-02-11T03:00:00.000Z", "data_pagamento": "2023-02-11T03:00:00.000Z", "valor": "-1000.00", "status": false, "conta_id": 1594758, "usuario_id": 1, "transferencia_id": null, "parcelamento_id": null },
+        ])
+
+        cy.get(loc.MENU.EXTRATO).click()
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Receita paga')).should('have.class', 'receitaPaga')
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Receita pendente')).should('have.class', 'receitaPendente')
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Despesa paga')).should('have.class', 'despesaPaga')
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Despesa pendente')).should('have.class', 'despesaPendente')
+    })
+
+    it('Should test the responsiveness', () => {
+        cy.get('[data-test=menu-home]').should('exist').and('be.visible')
+        cy.viewport(500, 700)
+        cy.get('[data-test=menu-home]').should('exist').and('be.not.visible')
     })
 })
